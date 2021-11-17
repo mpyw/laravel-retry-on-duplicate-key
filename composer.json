@@ -1,0 +1,38 @@
+{
+    "name": "mpyw/laravel-retry-on-duplicate-key",
+    "description": "Automatically retry non-atomic upsert operation when unique constraints are violated.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mpyw",
+            "email": "ryosuke_i_628@yahoo.co.jp"
+        }
+    ],
+    "keywords": ["laravel", "illuminate", "database", "retry", "duplicate", "constraint", "upsert"],
+    "autoload": {
+        "psr-4": {
+            "Mpyw\\LaravelRetryOnDuplicateKey\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mpyw\\LaravelRetryOnDuplicateKey\\Tests\\": "tests/"
+        },
+        "files": ["tests/polyfill.php.stub"]
+    },
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-pdo": "*",
+        "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0",
+        "illuminate/database": "^6.0 || ^7.0 || ^8.0 || ^9.0",
+        "illuminate/contracts": "^6.0 || ^7.0 || ^8.0 || ^9.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "*",
+        "orchestra/testbench-core": "^4.9 || ^5.9 || >=6.6",
+        "phpunit/phpunit": ">=9.5"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
