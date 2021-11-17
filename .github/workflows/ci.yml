@@ -67,10 +67,6 @@ jobs:
           - { php: 8.1, lib: { laravel: ^7.0, polyfill: '1' }, db: sqlsrv }
           - { php: 8.1, lib: { laravel: ^6.0, polyfill: '1' }, db: sqlsrv }
           - { php: 7.4, lib: { laravel: ^9.0 }, db: sqlsrv }
-          # ------
-          # Possibly pdo_odbc bugs
-          - { php: 8.1, lib: { laravel: ^9.0 }, db: sqlsrv }
-          - { php: 8.1, lib: { laravel: ^8.0 }, db: sqlsrv }
 
     steps:
       - uses: actions/checkout@v2

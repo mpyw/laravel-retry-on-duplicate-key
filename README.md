@@ -12,8 +12,6 @@ Original Issue:  [Duplicate entries on updateOrCreate · Issue #19372 · laravel
 composer require mpyw/laravel-retry-on-duplicate-key
 ```
 
-Important: Currently it seems to be broken on **PHP 8.1 + SQL Server**!
-
 ## Basic usage
 
 The default implementation is provided by `ConnectionServiceProvider`, however, **package discovery is not available**.
