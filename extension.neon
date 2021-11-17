@@ -1,0 +1,9 @@
+services:
+    -
+        class: Mpyw\LaravelRetryOnDuplicateKey\PHPStan\ConnectionClassExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension
+    -
+        class: Mpyw\LaravelRetryOnDuplicateKey\PHPStan\CallableReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension

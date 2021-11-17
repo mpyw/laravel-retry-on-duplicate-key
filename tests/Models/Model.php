@@ -9,6 +9,9 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model
 {
     use RetriesOnDuplicateKey;
 
+    /**
+     * @var string[]
+     */
     protected $guarded = [];
 
     public function getDateFormat(): string
