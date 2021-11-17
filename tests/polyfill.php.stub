@@ -1,65 +1,32 @@
 <?php
 
-namespace Illuminate\Database
+namespace Illuminate\Database\Connectors
 {
-    if (!getenv('ENABLE_POLYFILL')) {
-        return;
-    }
+    $file = file_get_contents(__DIR__ . '/../vendor/laravel/framework/src/Illuminate/Database/Connectors/SqlServerConnector.php');
+    eval('?>' . str_replace('class SqlServerConnector', 'class __OriginalConnector__', $file));
 
-    $file = file_get_contents(__DIR__ . '/../vendor/laravel/framework/src/Illuminate/Database/Connection.php');
-    eval('?>' . str_replace('class Connection', 'class __OriginalConnection__', $file));
-
-    class Connection extends __OriginalConnection__
+    class SqlServerConnector extends __OriginalConnector__
     {
-        protected $beforeExecutingCallbacks = [];
-
-        public function beforeExecuting(\Closure $callback)
+        /**
+         * Establish a database connection.
+         *
+         * @param  array  $config
+         * @return \PDO
+         */
+        public function connect(array $config)
         {
-            $this->beforeExecutingCallbacks[] = $callback;
+            $options = $this->getOptions($config);
 
-            return $this;
-        }
+            dump('Before connection creation');
+            dump($this->getDsn($config));
+            dump($this->getOptions($config));
 
-        public function hasModifiedRecords()
-        {
-            return $this->recordsModified;
-        }
+            $conn = $this->createConnection($this->getDsn($config), $config, $options);
 
-        public function forgetRecordModificationState()
-        {
-            $this->recordsModified = false;
-        }
+            dump('After connection creation');
+            dump($conn);
 
-        public function setRecordModificationState(bool $value)
-        {
-            $this->recordsModified = $value;
-
-            return $this;
-        }
-
-        protected function run($query, $bindings, \Closure $callback)
-        {
-            foreach ($this->beforeExecutingCallbacks as $beforeExecutingCallback) {
-                $beforeExecutingCallback($query, $bindings, $this);
-            }
-
-            $this->reconnectIfMissingConnection();
-
-            $start = microtime(true);
-
-            try {
-                $result = $this->runQueryCallback($query, $bindings, $callback);
-            } catch (QueryException $e) {
-                $result = $this->handleQueryException(
-                    $e, $query, $bindings, $callback
-                );
-            }
-
-            $this->logQuery(
-                $query, $bindings, $this->getElapsedTime($start)
-            );
-
-            return $result;
+            return $conn;
         }
     }
 }

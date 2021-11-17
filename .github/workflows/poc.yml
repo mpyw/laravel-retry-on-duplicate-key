@@ -1,0 +1,59 @@
+name: PoC
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      sqlsrv:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+          - '1433:1433'
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Password!
+        options: >-
+          --name sqlsrv
+          --health-cmd "echo quit | /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -l 1 -U sa -P Password!"
+
+    strategy:
+      matrix:
+        php: [8.1]
+        lib:
+          - { laravel: ^8.0 }
+        db: [sqlsrv]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+
+      - name: Set up SQLServer
+        if: matrix.db == 'sqlsrv'
+        run: |
+          docker exec sqlsrv \
+            /opt/mssql-tools/bin/sqlcmd \
+              -S 127.0.0.1 \
+              -U sa \
+              -P Password! \
+              -Q "create database [testing]"
+
+      - name: Adjust Package Versions
+        run: |
+          composer require "laravel/framework:${{ matrix.lib.laravel }}" --dev --no-update
+          composer update
+
+      - name: Prepare Database Config
+        run: mv tests/config/database.github.php tests/config/database.php
+
+      - name: Test
+        run: vendor/bin/phpunit
+        env:
+          DB: ${{ matrix.db }}
+          ENABLE_POLYFILL: ${{ matrix.lib.polyfill }}
