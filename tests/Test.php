@@ -20,6 +20,7 @@ class Test extends BaseTestCase
 
     /**
      * @param \Illuminate\Foundation\Application $app
+     * @return string[]
      */
     protected function getPackageProviders($app): array
     {

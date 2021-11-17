@@ -12,7 +12,8 @@
     "keywords": ["laravel", "illuminate", "database", "retry", "duplicate", "constraint", "upsert"],
     "autoload": {
         "psr-4": {
-            "Mpyw\\LaravelRetryOnDuplicateKey\\": "src/"
+            "Mpyw\\LaravelRetryOnDuplicateKey\\": "src/",
+            "Mpyw\\LaravelRetryOnDuplicateKey\\PHPStan\\": "phpstan/"
         }
     },
     "autoload-dev": {
@@ -31,8 +32,20 @@
     "require-dev": {
         "orchestra/testbench": "*",
         "orchestra/testbench-core": "^4.9 || ^5.9 || >=6.6",
-        "phpunit/phpunit": ">=9.5"
+        "phpunit/phpunit": ">=9.5",
+        "phpstan/phpstan": ">=1.1"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "phpstan": "vendor/bin/phpstan analyse --level=8 --configuration=extension.neon src tests"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
+    }
 }
