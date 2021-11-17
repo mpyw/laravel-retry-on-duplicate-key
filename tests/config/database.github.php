@@ -42,5 +42,7 @@ return [
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
+        'odbc' => (bool)getenv('ENABLE_ODBC'),
+        'odbc_datasource_name' => 'Driver={ODBC Driver 17 for SQL Server};Server=127.0.0.1;Database=testing;UID=sa;PWD=Password!',
     ],
 ];

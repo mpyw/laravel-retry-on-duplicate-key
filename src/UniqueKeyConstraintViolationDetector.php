@@ -58,8 +58,8 @@ class UniqueKeyConstraintViolationDetector
     protected static function sqlserver(PDOException $e): bool
     {
         $phrase = '(?:' . \implode('|', [
-            'Violation of PRIMARY KEY constraint',
-            'Cannot insert duplicate key row',
+            'Violation of PRIMARY KEY constraint', // 2627
+            'Cannot insert duplicate key row', // 2601
         ]) . ')';
 
         $pattern = '/' . \implode('|', [
@@ -67,6 +67,8 @@ class UniqueKeyConstraintViolationDetector
             "^SQLSTATE\[HY000]: General error: 20018 $phrase",
             // pdo_sqlsrv (SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]...)
             "^SQLSTATE\[23000]: *+(?:\[[ \w-]++\])++ *+$phrase",
+            // pdo_odbc (SQLSTATE[23000]: Integrity constraint violation: (...) [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]...)
+            "^SQLSTATE\[23000]: Integrity constraint violation: (?:2627|2601) ",
         ]) . '/';
 
         return (bool)\preg_match($pattern, $e->getMessage());
