@@ -57,12 +57,18 @@ class UniqueKeyConstraintViolationDetector
 
     protected static function sqlserver(PDOException $e): bool
     {
-        return Str::startsWith(
-            $e->getMessage(),
-            [
-                'SQLSTATE[HY000]: General error: 20018 Violation of PRIMARY KEY constraint',
-                'SQLSTATE[HY000]: General error: 20018 Cannot insert duplicate key row',
-            ],
-        );
+        $phrase = '(?:' . \implode('|', [
+            'Violation of PRIMARY KEY constraint',
+            'Cannot insert duplicate key row',
+        ]) . ')';
+
+        $pattern = '/' . \implode('|', [
+            // pdo_dblib
+            "^SQLSTATE\[HY000]: General error: 20018 $phrase",
+            // pdo_sqlsrv (SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]...)
+            "^SQLSTATE\[23000]: *+(?:\[[ \w-]++\])++ *+$phrase",
+        ]) . '/';
+
+        return (bool)\preg_match($pattern, $e->getMessage());
     }
 }
