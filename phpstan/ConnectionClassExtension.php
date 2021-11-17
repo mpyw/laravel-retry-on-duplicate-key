@@ -11,7 +11,7 @@ final class ConnectionClassExtension implements MethodsClassReflectionExtension
 {
     public function hasMethod(ClassReflection $classReflection, string $methodName): bool
     {
-        return \is_subclass_of($classReflection->getName(), ConnectionInterface::class)
+        return \is_a($classReflection->getName(), ConnectionInterface::class, true)
             && $methodName === 'retryOnDuplicateKey';
     }
 
