@@ -31,7 +31,7 @@ final class CallableArgumentParameter implements ParameterReflection
 
     public function isVariadic(): bool
     {
-        return true;
+        return false;
     }
 
     public function getDefaultValue(): ?Type
