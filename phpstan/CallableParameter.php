@@ -14,6 +14,9 @@ final class CallableParameter implements ParameterReflection
      */
     private array $argumentParameters;
 
+    /**
+     * @param CallableArgumentParameter[] $argumentParameters
+     */
     public function __construct(array $argumentParameters)
     {
         $this->argumentParameters = $argumentParameters;

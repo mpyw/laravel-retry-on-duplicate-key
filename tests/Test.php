@@ -72,7 +72,9 @@ class Test extends BaseTestCase
 
     protected function db(): Connection
     {
-        return $this->app->make(Connection::class);
+        $connection = $this->app->make(Connection::class);
+        assert($connection instanceof Connection);
+        return $connection;
     }
 
     public function testRetryOnDuplicatePrimaryKey(): void

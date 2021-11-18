@@ -15,7 +15,7 @@ use PHPStan\Type\Type;
 
 final class RetryOnDuplicateKeyMethod implements MethodReflection
 {
-    protected ClassReflection $class;
+    private ClassReflection $class;
 
     public function __construct(ClassReflection $classReflection)
     {
@@ -75,7 +75,7 @@ final class RetryOnDuplicateKeyMethod implements MethodReflection
                     ...$argumentParameters,
                 ],
                 false,
-                $returnType ?? new MixedType(),
+                new MixedType(),
             );
         }
 

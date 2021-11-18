@@ -37,7 +37,7 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "phpstan": "vendor/bin/phpstan analyse --level=8 --configuration=extension.neon src tests"
+        "phpstan": "vendor/bin/phpstan analyse --level=9 --configuration=extension.neon src tests phpstan"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
