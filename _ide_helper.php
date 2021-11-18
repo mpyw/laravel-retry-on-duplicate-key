@@ -10,12 +10,6 @@ namespace Illuminate\Database
          * @param mixed  ...$args
          * @return mixed
          * @see \Mpyw\LaravelRetryOnDuplicateKey\RetriesOnDuplicateKey
-         *
-         * @phpstan-template TReturn
-         * @phpstan-template TArgs
-         * @phpstan-param callable(TArgs): TReturn $callback
-         * @phpstan-param TArgs ...$args
-         * @phpstan-return TReturn
          */
         public function retryOnDuplicateKey(callable $callback, ...$args);
     }
@@ -28,12 +22,6 @@ namespace Illuminate\Database
          * @param mixed  ...$args
          * @return mixed
          * @see \Mpyw\LaravelRetryOnDuplicateKey\RetriesOnDuplicateKey
-         *
-         * @phpstan-template TReturn
-         * @phpstan-template TArgs
-         * @phpstan-param callable(TArgs): TReturn $callback
-         * @phpstan-param TArgs ...$args
-         * @phpstan-return TReturn
          */
         public function retryOnDuplicateKey(callable $callback, ...$args)
         {
