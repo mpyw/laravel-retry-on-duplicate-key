@@ -33,7 +33,9 @@
         "orchestra/testbench": "*",
         "orchestra/testbench-core": "^4.9 || ^5.9 || >=6.6",
         "phpunit/phpunit": ">=9.5",
-        "phpstan/phpstan": ">=1.1"
+        "phpstan/phpstan": ">=1.1",
+        "phpstan/extension-installer": ">=1.1",
+        "nunomaduro/larastan": "^1.0"
     },
     "scripts": {
         "test": "vendor/bin/phpunit",

@@ -16,12 +16,10 @@ use PHPStan\Type\Type;
 final class RetryOnDuplicateKeyMethod implements MethodReflection
 {
     private ClassReflection $class;
-    private bool $static;
 
-    public function __construct(ClassReflection $classReflection, bool $static)
+    public function __construct(ClassReflection $classReflection)
     {
         $this->class = $classReflection;
-        $this->static = $static;
     }
 
     public function getDeclaringClass(): ClassReflection
@@ -31,7 +29,7 @@ final class RetryOnDuplicateKeyMethod implements MethodReflection
 
     public function isStatic(): bool
     {
-        return $this->static;
+        return false;
     }
 
     public function isPrivate(): bool
