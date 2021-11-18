@@ -55,21 +55,18 @@ jobs:
           - { laravel: ^6.0, polyfill: '1' }
         db: [mysql, pgsql, sqlite, sqlsrv]
         exclude:
-          - { php: 8.1, lib: { laravel: ^7.0, polyfill: '1' }, db: mysql }
-          - { php: 8.1, lib: { laravel: ^6.0, polyfill: '1' }, db: mysql }
-          - { php: 7.4, lib: { laravel: ^9.0 }, db: mysql }
-          - { php: 8.1, lib: { laravel: ^7.0, polyfill: '1' }, db: pgsql }
-          - { php: 8.1, lib: { laravel: ^6.0, polyfill: '1' }, db: pgsql }
-          - { php: 7.4, lib: { laravel: ^9.0 }, db: pgsql }
-          - { php: 8.1, lib: { laravel: ^7.0, polyfill: '1' }, db: sqlite }
-          - { php: 8.1, lib: { laravel: ^6.0, polyfill: '1' }, db: sqlite }
-          - { php: 7.4, lib: { laravel: ^9.0 }, db: sqlite }
-          - { php: 8.1, lib: { laravel: ^7.0, polyfill: '1' }, db: sqlsrv }
-          - { php: 8.1, lib: { laravel: ^6.0, polyfill: '1' }, db: sqlsrv }
-          - { php: 7.4, lib: { laravel: ^9.0 }, db: sqlsrv }
+          - { php: 8.1, lib: { laravel: ^7.0, polyfill: '1' } }
+          - { php: 8.1, lib: { laravel: ^6.0, polyfill: '1' } }
+          - { php: 7.4, lib: { laravel: ^9.0 } }
         include:
           - { php: 8.1, lib: { laravel: ^9.0 }, db: sqlsrv, odbc: '1' }
           - { php: 8.1, lib: { laravel: ^8.0 }, db: sqlsrv, odbc: '1' }
+          - { php: 8.1, lib: { laravel: ^9.0 }, db: sqlsrv, odbc: '' }
+          - { php: 8.1, lib: { laravel: ^8.0 }, db: sqlsrv, odbc: '' }
+          - { php: 8.1, lib: { laravel: ^9.0 }, db: sqlite, phpstan: '1' }
+          - { php: 8.1, lib: { laravel: ^8.0 }, db: sqlite, phpstan: '1' }
+          - { php: 8.0, lib: { laravel: ^9.0 }, db: sqlite, phpstan: '1' }
+          - { php: 8.0, lib: { laravel: ^8.0 }, db: sqlite, phpstan: '1' }
 
     steps:
       - uses: actions/checkout@v2
@@ -112,10 +109,9 @@ jobs:
       - name: Prepare Coverage Directory
         run: mkdir -p build/logs
 
-#      - name: PHPStan
-#        run: composer phpstan
-#        env:
-#          ENABLE_POLYFILL: ${{ matrix.lib.polyfill }}
+      - name: PHPStan
+        if: ${{ matrix.phpstan }}
+        run: composer phpstan
 
       - name: Test
         run: composer test -- --coverage-clover build/logs/clover.xml
