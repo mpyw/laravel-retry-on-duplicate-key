@@ -62,25 +62,16 @@ final class RetryOnDuplicateKeyMethod implements MethodReflection
         $variants = [];
 
         for ($i = 0; $i < 10; ++$i) {
-            $map = [
-                'TReturn' => new MixedType(),
-            ];
-            for ($j = 0; $j < $i; ++$j) {
-                $map['TArg' . ($j + 1)] = New MixedType();
-            }
-            $map = new TemplateTypeMap($map);
-
             $argumentParameters = [];
             for ($j = 0; $j < $i; ++$j) {
-                $argumentParameters[] = new CallableArgumentParameter($map->getType('TArg' . ($j + 1)));
+                $argumentParameters[] = new CallableArgumentParameter();
             }
-            $returnType = $map->getType('TReturn');
 
             $variants[] = new FunctionVariant(
-                $map,
+                TemplateTypeMap::createEmpty(),
                 null,
                 [
-                    new CallableParameter($argumentParameters, $returnType),
+                    new CallableParameter($argumentParameters),
                     ...$argumentParameters,
                 ],
                 false,

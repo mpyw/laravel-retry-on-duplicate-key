@@ -18,14 +18,8 @@ class RetryOnDuplicateKey
     /**
      * Retries once on duplicate key errors.
      *
-     * @param mixed  ...$args
+     * @param mixed ...$args
      * @return mixed
-     *
-     * @phpstan-template TReturn
-     * @phpstan-template TArgs
-     * @phpstan-param callable(TArgs): TReturn $callback
-     * @phpstan-param TArgs ...$args
-     * @phpstan-return TReturn
      */
     public function __invoke(callable $callback, ...$args)
     {
