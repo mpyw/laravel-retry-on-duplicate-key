@@ -11,12 +11,6 @@ trait RetriesOnDuplicateKey
      *
      * @param mixed  ...$args
      * @return mixed
-     *
-     * @phpstan-template TReturn
-     * @phpstan-template TArgs
-     * @phpstan-param callable(TArgs): TReturn $callback
-     * @phpstan-param TArgs ...$args
-     * @phpstan-return TReturn
      */
     public function retryOnDuplicateKey(callable $callback, ...$args)
     {

@@ -9,13 +9,6 @@ use PHPStan\Type\Type;
 
 final class CallableArgumentParameter implements ParameterReflection
 {
-    private Type $type;
-
-    public function __construct(?Type $type = null)
-    {
-        $this->type = $type ?? new MixedType();
-    }
-
     public function getName(): string
     {
         return 'args';
@@ -28,7 +21,7 @@ final class CallableArgumentParameter implements ParameterReflection
 
     public function getType(): Type
     {
-        return $this->type;
+        return new MixedType();
     }
 
     public function passedByReference(): PassedByReference
@@ -38,7 +31,7 @@ final class CallableArgumentParameter implements ParameterReflection
 
     public function isVariadic(): bool
     {
-        return false;
+        return true;
     }
 
     public function getDefaultValue(): ?Type

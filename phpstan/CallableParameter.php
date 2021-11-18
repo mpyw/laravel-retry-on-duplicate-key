@@ -5,7 +5,6 @@ namespace Mpyw\LaravelRetryOnDuplicateKey\PHPStan;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\PassedByReference;
 use PHPStan\Type\CallableType;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
 final class CallableParameter implements ParameterReflection
@@ -14,12 +13,10 @@ final class CallableParameter implements ParameterReflection
      * @var CallableArgumentParameter[]
      */
     private array $argumentParameters;
-    private Type $returnType;
 
-    public function __construct(array $argumentParameters, ?Type $returnType = null)
+    public function __construct(array $argumentParameters)
     {
         $this->argumentParameters = $argumentParameters;
-        $this->returnType = $returnType ?? new MixedType();
     }
 
     public function getName(): string
@@ -34,7 +31,7 @@ final class CallableParameter implements ParameterReflection
 
     public function getType(): Type
     {
-        return new CallableType($this->argumentParameters, $this->returnType);
+        return new CallableType($this->argumentParameters);
     }
 
     public function passedByReference(): PassedByReference
