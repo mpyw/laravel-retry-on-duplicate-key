@@ -7,8 +7,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptor;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 
 final class CallableReturnTypeExtension implements DynamicMethodReturnTypeExtension
@@ -25,7 +25,7 @@ final class CallableReturnTypeExtension implements DynamicMethodReturnTypeExtens
 
     public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope): Type
     {
-        if (count($methodCall->getArgs()) > 0) {
+        if (\count($methodCall->getArgs()) > 0) {
             $type = $scope->getType($methodCall->getArgs()[0]->value);
 
             if ($type instanceof ParametersAcceptor) {
@@ -33,10 +33,6 @@ final class CallableReturnTypeExtension implements DynamicMethodReturnTypeExtens
             }
         }
 
-        return ParametersAcceptorSelector::selectFromArgs(
-            $scope,
-            $methodCall->getArgs(),
-            $methodReflection->getVariants(),
-        )->getReturnType();
+        return new MixedType();
     }
 }
