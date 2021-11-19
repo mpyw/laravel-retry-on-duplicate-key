@@ -7,3 +7,7 @@ services:
         class: Mpyw\LaravelRetryOnDuplicateKey\PHPStan\CallableReturnTypeExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
+    -
+        class: Mpyw\LaravelRetryOnDuplicateKey\PHPStan\CallableFacadeReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicStaticMethodReturnTypeExtension
