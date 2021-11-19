@@ -35,10 +35,8 @@ class UniqueKeyConstraintViolationDetector
 
     protected static function mysql(PDOException $e): bool
     {
-        return Str::startsWith(
-            $e->getMessage(),
-            'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry',
-        );
+        // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry
+        return $e->getCode() === '23000' && ($e->errorInfo[1] ?? 0) === 1062;
     }
 
     protected static function postgres(PDOException $e): bool
@@ -49,28 +47,32 @@ class UniqueKeyConstraintViolationDetector
 
     protected static function sqlite(PDOException $e): bool
     {
-        return Str::startsWith(
-            $e->getMessage(),
-            'SQLSTATE[23000]: Integrity constraint violation: 19 UNIQUE constraint failed',
-        );
+        // SQLite returns SQLSTATE[23000] and 19 (SQLITE_CONSTRAINT) on all constraint violations.
+        // So we need to check messages.
+        return $e->getCode() === '23000'
+            && ($e->errorInfo[1] ?? 0) === 19
+            && Str::startsWith($e->errorInfo[2] ?? '', 'UNIQUE constraint failed');
     }
 
     protected static function sqlserver(PDOException $e): bool
     {
-        $phrase = '(?:' . \implode('|', [
-            'Violation of PRIMARY KEY constraint', // 2627
-            'Cannot insert duplicate key row', // 2601
-        ]) . ')';
+        switch ($e->getCode()) {
+            // The following drivers correctly return error codes.
+            //
+            // - pdo_sqlsrv (SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]...)
+            // - pdo_odbc (SQLSTATE[23000]: Integrity constraint violation: (...) [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]...)
+            case '23000':
+                return \in_array($e->errorInfo[1] ?? 0, [2627, 2601], true);
 
-        $pattern = '/' . \implode('|', [
-            // pdo_dblib
-            "^SQLSTATE\[HY000]: General error: 20018 $phrase",
-            // pdo_sqlsrv (SQLSTATE[23000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]...)
-            "^SQLSTATE\[23000]: *+(?:\[[ \w-]++\])++ *+$phrase",
-            // pdo_odbc (SQLSTATE[23000]: Integrity constraint violation: (...) [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]...)
-            "^SQLSTATE\[23000]: Integrity constraint violation: (?:2627|2601) ",
-        ]) . '/';
-
-        return (bool)\preg_match($pattern, $e->getMessage());
+            // pdo_dblib returns SQLSTATE[HY000] and 20018 (General Error) on all constraint violations.
+            // So we need to check messages.
+            case 'HY000':
+            default:
+                return ($e->errorInfo[1] ?? 0) === 20018
+                    && Str::startsWith($e->errorInfo[2] ?? '', [
+                        'Violation of PRIMARY KEY constraint',
+                        'Cannot insert duplicate key row',
+                    ]);
+        }
     }
 }
