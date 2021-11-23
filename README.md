@@ -110,9 +110,9 @@ class MySqlConnection extends BaseMySqlConnection
 - [[8.x] Add upsert to Eloquent and Base Query Builders by paras-malhotra · Pull Request #34698 · laravel/framework](https://github.com/laravel/framework/pull/34698)
 - [staudenmeir/laravel-upsert: Laravel UPSERT and INSERT IGNORE queries](https://github.com/staudenmeir/laravel-upsert)
 
-These implementations are focused on atomically performing INSERT queries. Hence, they have the following problems.
+These implementations are focused on atomically performing INSERT-or-UPDATE queries. Hence, they have the following problems.
 
-- The INSERT query is always executed, which ruins the **`sticky`** optimization when the connection has both Reader (Replica) and Writer (Primary).
-- The SELECT query is not executed, so the results cannot be retrieved.
+- The affecting query is always executed, which may ruin the **`sticky`** optimization when the connection has both Reader (Replica) and Writer (Primary).
+- The SELECT query is never executed, so the results cannot be retrieved.
 
-This library is a wise choice if your queries complete mostly with only 1 SELECT, rarely with 1 INSERT + 1 SELECT.
+This library is a wise choice if your queries complete mostly with only 1 SELECT, rarely with extra affecting queries.
