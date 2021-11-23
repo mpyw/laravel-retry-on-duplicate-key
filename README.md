@@ -114,5 +114,9 @@ These implementations are focused on atomically performing INSERT-or-UPDATE quer
 
 - The affecting query is always executed, which may ruin the **`sticky`** optimization when the connection has both Reader (Replica) and Writer (Primary).
 - The SELECT query is never executed, so the results cannot be retrieved.
+- `upsert()` calls never trigger Eloquent events.
 
-This library is a wise choice if your queries complete mostly with only 1 SELECT, rarely with extra affecting queries.
+This library is a wise choice if:
+
+- Your `firstOrCreate()` `firstOrNew()` queries complete **mostly with only 1 SELECT**, rarely with succeeding 1 INSERT.
+- Your need to trigger Eloquent events like `created` or `updated`.
