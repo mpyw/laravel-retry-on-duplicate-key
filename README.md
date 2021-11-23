@@ -112,9 +112,9 @@ class MySqlConnection extends BaseMySqlConnection
 
 These implementations are focused on atomically performing **INSERT-or-UPDATE** queries. Hence, there are definitely clear differences in usage.
 
-- `firstOrCreate()` `firstOrNew()` have clear advantages if their calls complete **mostly with only one SELECT** and rarely with succeeding one INSERT.
+- `firstOrCreate()` `firstOrNew()` have clear advantages if their call complete **mostly with only one SELECT** and rarely with succeeding one INSERT.
   - In contrast, you must always execute two queries in all cases with `upsert()`.
 - As for `updateOrCreate()`, there may be considerations depending on RDBMS.
   - For RDBMS other than MySQL, `updateOrCreate()` would be better unless its call definitely changes field values on rows. `upsert()` may ruin the **`sticky`** optimization when the connection has both Reader (Replica) and Writer (Primary) because they assume that all rows narrowed by WHERE conditions have been affected.
   - In MySQL, `upsert()` will be efficient without any considerations in many situations. It regards that only rows are affected whose field values are actually changed.
-- Be careful that `upsert()` never trigger Eloquent events such as `created` or `updated` because its implementation is on Eloquent Builder, not on Model.
+- Be careful that `upsert()` never triggers Eloquent events such as `created` or `updated` because its implementation is on Eloquent Builder, not on Model.
