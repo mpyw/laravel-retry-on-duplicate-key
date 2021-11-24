@@ -112,10 +112,12 @@ class MySqlConnection extends BaseMySqlConnection
 
 These implementations are focused on atomically performing **INSERT-or-UPDATE** queries. Hence, there are definitely clear differences in usage.
 
-- `firstOrCreate()` `firstOrNew()` have clear advantages if their calls complete **mostly with only one SELECT** and rarely with succeeding one INSERT.
+- `firstOrCreate()` `updateOrCreate()` save **auto-increment numbering spaces** efficiently.
+  - In contrast, `upsert()` always increments the number even if no INSERT occurs and it leads to yield missing numbers. This can be a serious problem if the query is executed frequently. If you still want to go along with `upsert()`, you may need to consider using UUID or ULID instead of auto-increment.
+- `firstOrCreate()` has clear advantages if its call completes **mostly with only one SELECT** and rarely with succeeding one INSERT.
   - In contrast, you must always execute two queries in all cases with `upsert()`.
-- As for `updateOrCreate()`, there may be considerations depending on RDBMS.
+- As for `updateOrCreate()`, there may be extra considerations depending on RDBMS.
   - For RDBMS other than MySQL, `updateOrCreate()` would be better unless its call definitely changes field values on rows. `upsert()` may ruin the **[`sticky`](https://laravel.com/docs/8.x/database#read-and-write-connections)** optimization when the connection has both Reader (Replica) and Writer (Primary) because they assume that all rows narrowed by WHERE conditions have been affected.
-  - In MySQL, `upsert()` will be efficient without any considerations in many situations. It regards that only rows are affected whose field values are actually changed.
+  - In MySQL, `upsert()` has no limitations about that. It regards that only rows are affected whose field values are actually changed.
 - Be careful that `upsert()` never triggers Eloquent events such as `created` or `updated` because its implementation is on Eloquent Builder, not on Model.
 - Only `upsert()` supports bulk insert. It is beneficial if there are a large number of records and you don't need any Eloquent events.
