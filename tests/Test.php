@@ -90,11 +90,11 @@ class Test extends BaseTestCase
                 $user = new User();
                 $user->fill(['id' => 1, 'email' => 'example-another@example.com', 'type' => 'consumer'])->save();
             });
+            $this->fail();
         } catch (QueryException $e) {
+            var_dump($e->errorInfo);
+            $this->assertCount(2, $this->queries);
         }
-
-        $this->assertTrue(isset($e));
-        $this->assertCount(2, $this->queries);
     }
 
     public function testRetryOnDuplicateUniqueKey(): void
@@ -108,11 +108,11 @@ class Test extends BaseTestCase
                 $user = new User();
                 $user->fill(['id' => 2, 'email' => 'example@example.com', 'type' => 'consumer'])->save();
             });
+            $this->fail();
         } catch (QueryException $e) {
+            var_dump($e->errorInfo);
+            $this->assertCount(2, $this->queries);
         }
-
-        $this->assertTrue(isset($e));
-        $this->assertCount(2, $this->queries);
     }
 
     public function testDontRetryOnForeignKeyConstraintViolation(): void
@@ -127,11 +127,11 @@ class Test extends BaseTestCase
                 $post = new Post();
                 $post->fill(['user_id' => 9999])->save();
             });
+            $this->fail();
         } catch (QueryException $e) {
+            var_dump($e->errorInfo);
+            $this->assertCount(1, $this->queries);
         }
-
-        $this->assertTrue(isset($e));
-        $this->assertCount(1, $this->queries);
     }
 
     public function testDontRetryOnEnumConstraintViolation(): void
@@ -146,10 +146,10 @@ class Test extends BaseTestCase
                 $user = new User();
                 $user->fill(['id' => 2, 'email' => 'example-another@example.com', 'type' => 'foo'])->save();
             });
+            $this->fail();
         } catch (QueryException $e) {
+            var_dump($e->errorInfo);
+            $this->assertCount(1, $this->queries);
         }
-
-        $this->assertTrue(isset($e));
-        $this->assertCount(1, $this->queries);
     }
 }
