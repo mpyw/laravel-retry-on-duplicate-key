@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mpyw\LaravelRetryOnDuplicateKey;
 
 use Illuminate\Database\Connection;
@@ -26,7 +28,7 @@ class RetryOnDuplicateKey
         try {
             return $callback(...$args);
         } catch (PDOException $e) {
-            if (UniqueKeyConstraintViolationDetector::uniqueKeyConstraintViolated($this->connection, $e)) {
+            if (UniqueConstraintViolationDetector::uniqueConstraintViolated($this->connection, $e)) {
                 $this->forceReferringPrimaryConnection();
                 return $callback(...$args);
             }
