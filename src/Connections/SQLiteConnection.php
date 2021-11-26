@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mpyw\LaravelRetryOnDuplicateKey\Connections;
 
 use Illuminate\Database\SQLiteConnection as BaseSQLiteConnection;
