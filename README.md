@@ -1,6 +1,7 @@
 # Laravel Retry on Duplicate Key [![Build Status](https://github.com/mpyw/laravel-retry-on-duplicate-key/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mpyw/laravel-retry-on-duplicate-key/actions) [![Coverage Status](https://coveralls.io/repos/github/mpyw/laravel-retry-on-duplicate-key/badge.svg?branch=master)](https://coveralls.io/github/mpyw/laravel-retry-on-duplicate-key?branch=master)
 
-**ABANDONED: Due to changes in Laravel [v10.29.0](https://github.com/laravel/framework/releases/tag/v10.29.0), the functionalities of this library have been integrated into the Laravel core, making the library unnecessary in most cases. Therefore, maintenance will be discontinued. <ins>From now on, retry processing will be automatically performed in `Model::createOrFirst()`, `Model::firstOrCreate()`, and `Model::updateOrCreate()`</ins>. The only pattern that still has value is for `Model::firstOrNew() + save()`, but since equivalent processing can be written by yourself, please do not use this library anymore.**
+> [!CAUTION]
+> **ABANDONED: Due to changes in Laravel [v10.29.0](https://github.com/laravel/framework/releases/tag/v10.29.0), the functionalities of this library have been integrated into the Laravel core, making the library unnecessary in most cases. Therefore, maintenance will be discontinued. <ins>From now on, retry processing will be automatically performed in `Model::createOrFirst()`, `Model::firstOrCreate()`, and `Model::updateOrCreate()`</ins>. The only pattern that still has value is for `Model::firstOrNew() + save()`, but since equivalent processing can be written by yourself, please do not use this library anymore.**
 
 Automatically retry **non-atomic** upsert operation when unique constraints are violated.
 
@@ -25,7 +26,8 @@ composer require mpyw/laravel-retry-on-duplicate-key
 
 ## Basic usage
 
-The default implementation is provided by `ConnectionServiceProvider`, however, **package discovery is not available**.
+> [!IMPORTANT]
+> The default implementation is provided by `ConnectionServiceProvider`, however, **package discovery is not available**.
 Be careful that you MUST register it in **`config/app.php`** by yourself.
 
 ```php
